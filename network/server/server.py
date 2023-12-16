@@ -1,20 +1,7 @@
-import socketserver
-import cv2
+import socket
 import sys
 
 PORT = 4242
-QUALITY_OF_IMAGE = 100
-
-
-class TCPHandler(socketserver.BaseRequestHandler):
-    videoCap = ''
-
-    def handle(self):
-        ret, frame = videoCap.read()
-        encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), QUALITY_OF_IMAGE]
-        jpegs_byte = cv2.imencode('.jpeg', frame, encode_param)[1]
-        self.request.send(jpegs_byte)
-
 
 
 def main():
@@ -22,14 +9,20 @@ def main():
         print("引数にラズパイのipアドレスを指定してください")
         exit(1)
     HOST = sys.argv[1]
-    videoCap = cv2.VideoCapture(0)
-    socketserver.TCPServer.allow_reuse_address = True
-    server = socketserver.TCPServer((HOST, PORT), TCPHandler)
-    try:
-        server.serve_forever()
-    except KeyboardInterrupt:
-        server.shutdown()
-        sys.exit()
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket.bind((HOST, PORT))
+    server_socket.listen()
+    print(f"サーバーが{HOST}:{PORT}で待機中...")
+    client_socket, client_address = server_socket.accept()
+    print(f"クライアントが{client_address}が接続しました")
+    file_path = './test.mp4'
+    with open(file_path, 'rb') as file:
+        data = file.read(1024)
+        while data:
+            client_socket.send(data)
+            data = file.read(1024)
+    client_socket.close()
+    server_socket.close()
 
 if __name__ == "__main__":
     main()
