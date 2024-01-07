@@ -6,8 +6,9 @@ import numpy as np
 
 
 class RaspiCamera(object):
-    def __init__(self):
-        self.number_of_divisions = 3
+    def __init__(self, number_of_divisions=3, height_percentage=0.5):
+        self.number_of_divisions = number_of_divisions
+        self.height_percentage = height_percentage
         self.LOW_VALUE = 100
         self.HIGH_VALUE = 150
         self.camera = Picamera2()
@@ -27,7 +28,7 @@ class RaspiCamera(object):
         rgb_image = self.camera.capture_array()
         image = cv2.cvtColor(rgb_image, cv2.COLOR_BGR2GRAY)
         height, width = image.shape
-        height = int(height / 2)
+        height = int(height * self.height_percentage)
         width_step = int(width / self.number_of_divisions)
         color_ratio = [
             self.__image_to_color_ratio(

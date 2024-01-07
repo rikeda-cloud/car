@@ -1,12 +1,13 @@
 import threading
 import os, sys, time
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from multiprocessing import Value, Process
 from flask import Flask, render_template, Response
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from sensor.camera import RaspiCamera
-# from aws_connection import AwsConnection
+from sensor.ultrasonic import UltraSonic
 from joystick_control import joystick_control
-from global_atomic_value import speed, handle, is_measure
 from get_training_data import get_training_data
+
 
 app = Flask(__name__)
 
@@ -14,22 +15,22 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-def generate(camera):
-    joystick_thread = threading.Thread(target=joystick_control)
-    joystick_thread.start()
-    # conn = AwsConnection()
+def generate(camera, ultrasonic):
+    handle = Value('i', 360) # 290 ~ 430
+    speed = Value('i', 370) # 150 ~ 370
+    is_measure = Value('i', 0)
+    process = Process(target=joystick_control, args=[handle, speed, is_measure])
+    process.start()
     while True:
-        time.sleep(0.01)
-        if is_measure.get() == True:
-            training_data = get_training_data(camera)
+        if is_measure.value == True:
+            training_data = get_training_data(camera, ultrasonic, handle, speed)
             print(training_data)
-    #        conn.send(training_data)
         frame = camera.get_frame()
         yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
 @app.route('/feed')
 def feed():
-    return Response(generate(RaspiCamera()),
+    return Response(generate(RaspiCamera(), UltraSonic()),
             mimetype='multipart/x-mixed-replace; boundary=frame')
 
 

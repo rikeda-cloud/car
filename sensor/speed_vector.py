@@ -16,14 +16,14 @@ def vector_to_angle_speed(vector_x: float, vector_y: float) -> Tuple[float, floa
     return (angle_deg, speed)
 
 
-# def debug_print(angle, speed):
-#     vector_x, vector_y = angle_speed_to_vector(angle, speed)
-#     print(f"[{angle}, {speed}]  = {vector_x} {vector_y}")
-#     re_angle, re_speed = vector_to_angle_speed(vector_x, vector_y)
-#     print(f"{vector_x} {vector_y} = [{re_angle}, {re_speed}]")
-#     print("")
-# 
-# 
-# if __name__ == "__main__":
-#     for i in range(-45, 45, 5):
-#         debug_print(i, 100)
+def _debug_print(angle, speed):
+    vector_x, vector_y = angle_speed_to_vector(angle, speed)
+    print(f"[{angle}, {speed}]  = {vector_x} {vector_y}")
+    re_angle, re_speed = vector_to_angle_speed(vector_x, vector_y)
+    print(f"{vector_x} {vector_y} = [{re_angle}, {re_speed}]")
+    print("")
+
+
+if __name__ == "__main__":
+    for i in range(-45, 45, 5):
+        _debug_print(i, 100)

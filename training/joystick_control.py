@@ -7,7 +7,6 @@ import os
 from decimal import Decimal
 import pygame
 import Adafruit_PCA9685
-from global_atomic_value import speed, handle, is_measure
 
 
 MAX_SPEED = 390
@@ -26,14 +25,14 @@ def change_var(var, diff, max, min):
 
 os.environ["SDL_VIDEODRIVER"] = "dummy"
 
-def joystick_control():
+def joystick_control(handle, speed, is_measure):
     pwm = Adafruit_PCA9685.PCA9685(address=0x40)
     pwm.set_pwm_freq(60)
-    
+
     #モーター
-    pwm.set_pwm(14, 0, speed.get())
+    pwm.set_pwm(14, 0, speed.value)
     #ハンドル
-    pwm.set_pwm(15, 0, handle.get())
+    pwm.set_pwm(15, 0, handle.value)
 
     pygame.init()
     joy = pygame.joystick.Joystick(0)
@@ -60,19 +59,22 @@ def joystick_control():
             for i in range(n_hat):
                 s_hat[i] = joy.get_hat(i)
 
-            # コントローラLBをデータ取得の切り替えスイッチにする
+            # コントローラLBでデータ取得スイッチをon
             if s_btn[4] == 1:
-                is_measure.set(True if is_measure.get() == False else False)
+                is_measure.value = 1
+            # コントローラRBでデータ取得スイッチをoff
+            if s_btn[5] == 1:
+                is_measure.value = 0
 
             if s_btn[2] == 1:
-                speed.set(change_var(speed.get(), -10, MAX_SPEED, MIN_SPEED))
-                pwm.set_pwm(14, 0, speed.get())
+                speed.value = change_var(speed.value, -10, MAX_SPEED, MIN_SPEED)
+                pwm.set_pwm(14, 0, speed.value)
             elif s_btn[1] == 1:
-                speed.set(change_var(speed.get(), 10, MAX_SPEED, MIN_SPEED))
-                pwm.set_pwm(14, 0, speed.get())
+                speed.value = change_var(speed.value, 10, MAX_SPEED, MIN_SPEED)
+                pwm.set_pwm(14, 0, speed.value)
 
-            handle.set(360 + s_axe[0] * 70)
-            pwm.set_pwm(15, 0, int(handle.get()))
+            handle.value = int(360 + s_axe[0] * 70)
+            pwm.set_pwm(15, 0, handle.value)
             
             #pygame.event.pump()
             pygame.event.get()
