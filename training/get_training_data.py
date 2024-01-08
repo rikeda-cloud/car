@@ -7,6 +7,8 @@ from sensor.camera import RaspiCamera
 from sensor.ultrasonic import UltraSonic
 from sensor.speed_vector import angle_speed_to_vector
 
+HANDLE_DEFAULT = 360
+SPEED_DEFAULT = 371
 
 def get_training_data(camera, ultrasonic, handle, speed):
     training_data = {}
@@ -14,7 +16,8 @@ def get_training_data(camera, ultrasonic, handle, speed):
         ultrasonic.measure(),
         timestamp='{0:.1f}'.format(time.time()),
         color_ratio=camera.get_color_ratio(),
-        spped_vector=angle_speed_to_vector(handle.value, speed.value)
+        handle=handle.value,
+        speed=speed.value
     )
     return training_data
 

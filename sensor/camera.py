@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 
 
-class RaspiCamera(object):
+class RaspiCamera():
     def __init__(self, number_of_divisions=3, height_percentage=0.5):
         self.number_of_divisions = number_of_divisions
         self.height_percentage = height_percentage

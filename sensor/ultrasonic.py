@@ -14,6 +14,7 @@ class UltraSonic():
         while GPIO.input(echo) == target:
             sig = time.time()
             if time.time() - start_time > self.timeout:
+                raise timeout
                 break
         return sig
 
@@ -21,11 +22,14 @@ class UltraSonic():
         GPIO.output(trig, 1) #Trigピンの電圧をHIGH(3.3V)にする
         time.sleep(0.00001) #10μs待つ
         GPIO.output(trig, 0) #Trigピンの電圧をLOW(0V)にする
-        sigon = self._mesure_time(0, echo)
-        sigoff = self._mesure_time(1, echo)
-        d = (sigoff - sigon) * 34000 / 2 #距離を計算(単位はcm)
-        if d < 0 or 200 < d:
-            d = 200 #距離が200cm以上または0以下(timeoutで不正な値となった場合)は200cmを返す
+        try:
+            sigon = self._mesure_time(0, echo)
+            sigoff = self._mesure_time(1, echo)
+            d = (sigoff - sigon) * 34000 / 2 #距離を計算(単位はcm)
+            if d < -1 or 200 < d:
+                d = 200 #距離が200cm以上または0以下(timeoutで不正な値となった場合)は200cmを返す
+        except:
+            d = -1
         return d
         
     def measure(self):

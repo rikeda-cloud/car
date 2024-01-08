@@ -9,8 +9,8 @@ import pygame
 import Adafruit_PCA9685
 
 
-MAX_SPEED = 390
-MIN_SPEED = 150
+MAX_SPEED = 370
+MIN_SPEED = 350
 
 MAX_HANDLE = 450
 MIN_HANDLE = 270
@@ -21,7 +21,10 @@ HANDLING = 40
 def change_var(var, diff, max, min):
     if min < var + diff and var + diff < max:
         return var + diff
-    return var
+    elif var + diff <= min:
+        return min
+    else:
+        return max
 
 os.environ["SDL_VIDEODRIVER"] = "dummy"
 
@@ -67,11 +70,14 @@ def joystick_control(handle, speed, is_measure):
                 is_measure.value = 0
 
             if s_btn[2] == 1:
-                speed.value = change_var(speed.value, -10, MAX_SPEED, MIN_SPEED)
-                pwm.set_pwm(14, 0, speed.value)
+                diff = -1 if speed.value != MAX_SPEED else -10
+                speed.value = change_var(speed.value, diff, MAX_SPEED, MIN_SPEED)
             elif s_btn[1] == 1:
-                speed.value = change_var(speed.value, 10, MAX_SPEED, MIN_SPEED)
-                pwm.set_pwm(14, 0, speed.value)
+                speed.value = change_var(speed.value, 5, MAX_SPEED, MIN_SPEED)
+            else:
+                speed.value = change_var(speed.value, 1, MAX_SPEED, MIN_SPEED)
+            pwm.set_pwm(14, 0, speed.value)
+
 
             handle.value = int(360 + s_axe[0] * 70)
             pwm.set_pwm(15, 0, handle.value)
@@ -80,6 +86,7 @@ def joystick_control(handle, speed, is_measure):
             pygame.event.get()
 
             time.sleep(0.1)
+            #print("handle = ", handle.value, "speed = ", speed.value)
     except( KeyboardInterrupt, SystemExit): # Exit with Ctrl-C
         print("Exit")
 
@@ -88,5 +95,9 @@ def main():
     joystick_control()
 
 
+from multiprocessing import Value, Process
 if __name__ == "__main__":
-    main()
+    handle = Value('i', 360)
+    speed = Value('i', 370)
+    is_measure = Value('i', 0)
+    joystick_control(handle, speed, is_measure)
