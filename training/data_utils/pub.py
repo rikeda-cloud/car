@@ -6,9 +6,9 @@ import json
 # Define ENDPOINT, CLIENT_ID, PATH_TO_CERTIFICATE, PATH_TO_PRIVATE_KEY, PATH_TO_AMAZON_ROOT_CA_1, MESSAGE, TOPIC, and RANGE
 ENDPOINT = "a1jmtdvz0m9ze3-ats.iot.ap-northeast-1.amazonaws.com"
 CLIENT_ID = "testDevice"
-PATH_TO_CERTIFICATE = "./cert/rs-certificate.pem.crt"
-PATH_TO_PRIVATE_KEY = "./cert/rs-private.pem.key"
-PATH_TO_AMAZON_ROOT_CA_1 = "./cert/AmazonRootCA1.pem"
+PATH_TO_CERTIFICATE = "./data_utils/cert/rs-certificate.pem.crt"
+PATH_TO_PRIVATE_KEY = "./data_utils/cert/rs-private.pem.key"
+PATH_TO_AMAZON_ROOT_CA_1 = "./data_utils/cert/AmazonRootCA1.pem"
 MESSAGE = "Hello World"
 
 def connect_aws():
@@ -21,7 +21,7 @@ def connect_aws():
                 cert_filepath = PATH_TO_CERTIFICATE,
                 pri_key_filepath = PATH_TO_PRIVATE_KEY,
                 client_bootstrap = client_bootstrap,
-                ca_filepath = "./cert/AmazonRootCA1.pem",
+                ca_filepath = "./data_utils/cert/AmazonRootCA1.pem",
                 client_id = CLIENT_ID,
                 clean_session=False,
                 keep_alive_secs=6

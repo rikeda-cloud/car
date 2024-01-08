@@ -1,5 +1,5 @@
 import time
-import pub
+from data_utils import pub
 
 TOPIC = "training"
 
