@@ -38,7 +38,7 @@ class UltraSonic():
             GPIO.setup(self.TRIG_PIN[i], GPIO.OUT, initial=0),
             GPIO.setup(self.ECHO_PIN[i], GPIO.IN)
         result = {
-            "d_" + str(i + 1) : '{0:.1f}'.format(self._measure_dist(GPIO, trig, echo))
+            'd_' + str(i + 1) : '{0:.1f}'.format(self._measure_dist(GPIO, trig, echo))
             for i, (trig, echo) in enumerate(zip(self.TRIG_PIN, self.ECHO_PIN))
         }
         GPIO.cleanup()
