@@ -14,7 +14,7 @@ class RaspiCamera():
         self.camera = Picamera2()
         self.camera.start()
 
-    def __capture_gray_image(self):
+    def capture_gray_image(self):
         rgb_image = self.camera.capture_array()
         return cv2.cvtColor(rgb_image, cv2.COLOR_BGR2GRAY)
 
@@ -22,29 +22,30 @@ class RaspiCamera():
         height, width = image.shape
         return (int(height * self.height_percentage), width)
 
-    def _get_color_ratio(self, image, height, width):
+    def get_binarization_color_ratio(self, image):
+        height, width = self.__get_target_shape(image)
         width_step = int(width / self.divisions)
-        black_ratio = []
+        color_ratio = []
         for i in range(self.divisions):
             divide_image = image[height:, i * width_step: (i + 1) * width_step]
-            black_ratio.append(np.sum(divide_image < self.threshold) / divide_image.size)
-        return black_ratio
+            color_ratio.append(np.sum(divide_image < self.threshold) / divide_image.size)
+        return color_ratio
 
     def get_binarization_frame(self):
-        image = self.__capture_gray_image()
+        image = self.capture_gray_image()
+        color_ratio = self.get_binarization_color_ratio(image)
         height, width = self.__get_target_shape(image)
-        #color_ratio = self._get_color_ratio(image, height, width)
         image[height:, :] = (image[height:, :] > self.threshold) * 255
         _, binary_data = cv2.imencode(".jpg", image)
-        return (binary_data.tobytes(), [])
-        #return (binary_data.tobytes(), color_ratio)
+        return (binary_data.tobytes(), color_ratio)
 
     def get_frame(self):
         image_bytes = io.BytesIO()
         self.camera.capture_file(image_bytes, format='JPEG')
         return image_bytes.getvalue()
 
-    def __calc_haar_like(self, image, height):
+    def __calc_haar_like(self, image):
+        height, _ = image.shape
         rect_height = 40
         pattern_height = rect_height // 2
         peak_idx = 0
@@ -60,15 +61,27 @@ class RaspiCamera():
         image[peak_idx, :] = 0
         return (image, peak_idx / height)
 
-    def get_haar_like_frame(self):
-        image = self.__capture_gray_image()
-        height, width = image.shape
+    def get_haar_like_color_ratio(self, image):
+        _, width = image.shape
         width_step = int(width / self.number_of_window)
         relative_pos = []
         for i in range(self.number_of_window):
             start = i * width_step
             window_image = image[:, start: start + self.window_width]
-            window_image, pos = self.__calc_haar_like(window_image, height)
+            _, pos = self.__calc_haar_like(window_image)
+            relative_pos.append(pos)
+        return relative_pos
+        
+
+    def get_haar_like_frame(self):
+        image = self.capture_gray_image()
+        _, width = image.shape
+        width_step = int(width / self.number_of_window)
+        relative_pos = []
+        for i in range(self.number_of_window):
+            start = i * width_step
+            window_image = image[:, start: start + self.window_width]
+            window_image, pos = self.__calc_haar_like(window_image)
             relative_pos.append(pos)
             image[:, start: start + self.window_width] = window_image
         _, binary_data = cv2.imencode(".jpg", image)

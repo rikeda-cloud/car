@@ -26,7 +26,7 @@ def generate(camera, ultrasonic):
         start = time.time()
         #frame = camera.get_frame()
         #frame, color_ratio = camera.get_binarization_frame()
-        #frame, color_ratio = camera.get_haar_like_frame()
+        frame, color_ratio = camera.get_haar_like_frame()
         if is_measure.value == True:
             training_data = get_training_data(color_ratio, ultrasonic, handle, speed)
             print(training_data)
