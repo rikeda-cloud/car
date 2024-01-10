@@ -5,17 +5,13 @@ import time
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from sensor.camera import RaspiCamera
 from sensor.ultrasonic import UltraSonic
-from sensor.speed_vector import angle_speed_to_vector
 
-HANDLE_DEFAULT = 360
-SPEED_DEFAULT = 371
-
-def get_training_data(camera, ultrasonic, handle, speed):
+def get_training_data(color_ratio, ultrasonic, handle, speed):
     training_data = {}
     training_data.update(
         ultrasonic.measure(),
         timestamp='{0:.1f}'.format(time.time()),
-        color_ratio=camera.get_color_ratio(),
+        color_ratio=color_ratio,
         handle=handle.value,
         speed=speed.value
     )

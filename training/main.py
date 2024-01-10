@@ -23,13 +23,17 @@ def generate(camera, ultrasonic):
     process.start()
     aws_data_module = data_utils.send_data.AwsDataModule()
     while True:
+        start = time.time()
+        #frame = camera.get_frame()
+        #frame, color_ratio = camera.get_binarization_frame()
+        #frame, color_ratio = camera.get_haar_like_frame()
         if is_measure.value == True:
-            training_data = get_training_data(camera, ultrasonic, handle, speed)
-            # print(training_data)
+            training_data = get_training_data(color_ratio, ultrasonic, handle, speed)
+            print(training_data)
             #データ送信モジュール
-            aws_data_module.send(training_data)
-        frame = camera.get_frame()
+            #aws_data_module.send(training_data)
         yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+        #print("time = ", time.time() - start)
 
 @app.route('/feed')
 def feed():
