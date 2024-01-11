@@ -3,7 +3,8 @@ import os, sys, time
 from multiprocessing import Value, Process
 from flask import Flask, render_template, Response
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from sensor.camera import RaspiCamera
+from sensor.camera.haar_like_camera import HaarLikeCamera
+from sensor.camera.binarization_camera import BinarizationCamera
 from sensor.ultrasonic import UltraSonic
 from joystick_control import joystick_control
 from get_training_data import get_training_data
@@ -24,20 +25,20 @@ def generate(camera, ultrasonic):
     aws_data_module = data_utils.send_data.AwsDataModule()
     while True:
         start = time.time()
-        #frame = camera.get_frame()
-        #frame, color_ratio = camera.get_binarization_frame()
-        frame, color_ratio = camera.get_haar_like_frame()
+        camera.capture()
         if is_measure.value == True:
-            training_data = get_training_data(color_ratio, ultrasonic, handle, speed)
-            print(training_data)
+            color_ratio = camera.color_ratio()
+            data = get_training_data(color_ratio, ultrasonic, handle, speed)
+            print(data)
             #データ送信モジュール
-            #aws_data_module.send(training_data)
+            #aws_data_module.send(data)
+        frame = camera.frame()
         yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-        #print("time = ", time.time() - start)
+        print("time = ", time.time() - start)
 
 @app.route('/feed')
 def feed():
-    return Response(generate(RaspiCamera(), UltraSonic()),
+    return Response(generate(BinarizationCamera(), UltraSonic()),
             mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
