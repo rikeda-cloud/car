@@ -9,6 +9,7 @@ from sensor.ultrasonic import UltraSonic
 from joystick_control import joystick_control
 from get_training_data import get_training_data
 import data_utils.send_data
+from json_buffer import JsonBuffer
 
 app = Flask(__name__)
 
@@ -22,23 +23,31 @@ def generate(camera, ultrasonic):
     is_measure = Value('i', 0)
     process = Process(target=joystick_control, args=[handle, speed, is_measure])
     process.start()
-    aws_data_module = data_utils.send_data.AwsDataModule()
+    #aws_data_module = data_utils.send_data.AwsDataModule()
+    buffer = JsonBuffer()
+    count = 0
     while True:
         start = time.time()
         camera.capture()
+        count += 1
         if is_measure.value == True:
-            color_ratio = camera.color_ratio()
-            data = get_training_data(color_ratio, ultrasonic, handle, speed)
-            print(data)
-            #データ送信モジュール
-            #aws_data_module.send(data)
+            if  count % 10 == 0:
+                count = 1
+                color_ratio = camera.color_ratio()
+                data = get_training_data(color_ratio, ultrasonic, handle, speed)
+                print(data)
+                buffer.add(data)
+                #aws_data_module.send(data) データ送信モジュール
+        elif buffer.is_empty() == False:
+            buffer.save()
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         frame = camera.frame()
         yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
         print("time = ", time.time() - start)
 
 @app.route('/feed')
 def feed():
-    return Response(generate(BinarizationCamera(), UltraSonic()),
+    return Response(generate(HaarLikeCamera(divisions=40), UltraSonic()),
             mimetype='multipart/x-mixed-replace; boundary=frame')
 
 

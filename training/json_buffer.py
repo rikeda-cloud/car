@@ -32,12 +32,22 @@ class JsonBuffer():
             if os.path.isfile(os.path.join(self.save_dir, f))
         ]
 
+    def del_newest_file(self):
+        json_files = self._get_json_files()
+        if json_files == []:
+            print("file is None!!")
+            return
+        json_files.sort(reverse=True)
+        os.unlink(json_files[0])
+        print("newest file is delete!!")
+
     def send_to_aws(self):
         aws_data_module = data_utils.send_data.AwsDataModule()
         json_files = self._get_json_files()
         for file in json_files:
             with open(file, 'r') as f:
-                data_list = f.read()
+                data_list = json.load(f)
+                [print(data) for data in data_list]
                 [aws_data_module.send(data) for data in data_list]
             os.unlink(file)
         os.rmdir(self.save_dir)
@@ -45,4 +55,5 @@ class JsonBuffer():
 
 if __name__ == '__main__':
     buffer = JsonBuffer()
+    #buffer.del_newest_file()
     buffer.send_to_aws()

@@ -13,7 +13,7 @@ class UltraSonic():
         sig = 0
         start_time = time.time()
         while GPIO.input(echo) == target:
-            time.sleep(0.0001) # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            #time.sleep(0.0001) # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             sig = time.time()
             if time.time() - start_time > self.timeout:
                 raise timeout
@@ -53,14 +53,14 @@ class UltraSonic():
         [threads[i].join() for i in range(number_of_sensor)]
 
         GPIO.cleanup()
-        return {'d_' + str(i + 1): '{0:.1f}'.format(result) for i, result in enumerate(result_list)}
+        return {'d_' + str(i + 1): '{}'.format(int(result * 10)) for i, result in enumerate(result_list)}
 
 
 if __name__ == '__main__':
     ultrasonic = UltraSonic()
     #print(ultrasonic.measure())
     while True:
-        start = time.time()
+    #    start = time.time()
         result = ultrasonic.measure()
         print(result)
-        print(time.time() - start)
+    #    print(time.time() - start)
