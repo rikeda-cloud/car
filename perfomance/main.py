@@ -1,5 +1,9 @@
 import Adafruit_PCA9685
-from sensor.camera import RaspiCamera
+import sys, os
+import time
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from sensor.camera.haar_like_camera import HaarLikeCamera
 from sensor.ultrasonic import UltraSonic
 
 
@@ -9,17 +13,18 @@ def run_minicar(camera, ultrasonic):
     # AWS = AwsConnection()
     try:
         while True:
-            color_ratio = camera.get_binarization_color_ratio(camera.capture_gray_image())
-            # color_ratio = camera.get_haar_like_color_ratio(camera.capture_gray_image())
+            camera.capture()
+            color_ratio = camera.color_ratio()
             perfomance_data = get_perfomance_data(color_ratio, ultrasonic)
-            handle, speed = calc_handle_speed(perfomance_data)
-            # aws_handle, aws_speed = AWS.send_perfomance_data(perfomance_data)
-            # handle, speed = mix_aws_and_local_data(handle, aws_handle, speed, aws_speed)
+            # handle, speed = AWS.send_perfomance_data(perfomance_data)
+            # local_handle, local_speed = calc_handle_speed(perfomance_data)
+            # handle, speed = mix_aws_and_local_data(handle, local_handle, speed, local_speed)
             pwm.set_pwm(14, 0, speed)
             pwm.set_pwm(15, 0, handle)
+            print(handle, speed)
     except(KeyboardInterrupt, SystemExit):
         print("Exit")
 
 
 if __name__ == "__main__":
-    run_minicar(RaspiCamera(), ultrasonic())
+    run_minicar(HaarLikeCamera(), UltraSonic())
