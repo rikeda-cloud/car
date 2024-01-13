@@ -1,7 +1,7 @@
 from sensor.camera.raspi_camera import RaspiCamera
 from typing import List
-import cv2
 import numpy as np
+
 
 class HaarLikeCamera(RaspiCamera):
     def __init__(self, divisions=20):
@@ -37,6 +37,7 @@ class HaarLikeCamera(RaspiCamera):
             self.image[int(pos * self.height), i * width_step: (i * width_step) + self.window_width] = 0
         self.relative_pos = None
         return self.image_to_frame()
+
 
 if __name__ == "__main__":
     camera = HaarLikeCamera()

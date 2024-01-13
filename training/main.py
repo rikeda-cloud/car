@@ -2,10 +2,11 @@ import threading
 import os, sys, time
 from multiprocessing import Value, Process
 from flask import Flask, render_template, Response
+
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from sensor.camera.haar_like_camera import HaarLikeCamera
 from sensor.camera.binarization_camera import BinarizationCamera
-from sensor.ultrasonic import UltraSonic
+from sensor.ultrasonic.process_ultrasonic import ProcessUltraSonic
 from joystick_control import joystick_control
 from get_training_data import get_training_data
 import data_utils.send_data
@@ -47,7 +48,7 @@ def generate(camera, ultrasonic):
 
 @app.route('/feed')
 def feed():
-    return Response(generate(HaarLikeCamera(divisions=40), UltraSonic()),
+    return Response(generate(HaarLikeCamera(divisions=40), ProcessUltraSonic()),
             mimetype='multipart/x-mixed-replace; boundary=frame')
 
 

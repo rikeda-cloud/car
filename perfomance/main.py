@@ -4,7 +4,8 @@ import time
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from sensor.camera.haar_like_camera import HaarLikeCamera
-from sensor.ultrasonic import UltraSonic
+from sensor.ultrasonic.process_ultrasonic import ProcessUltraSonic
+from get_perfomance_data import get_perfomance_data
 
 
 def run_minicar(camera, ultrasonic):
@@ -27,4 +28,4 @@ def run_minicar(camera, ultrasonic):
 
 
 if __name__ == "__main__":
-    run_minicar(HaarLikeCamera(), UltraSonic())
+    run_minicar(HaarLikeCamera(), ProcessUltraSonic())
