@@ -3,12 +3,14 @@ import sys, os
 import time
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from sensor.camera.process_camera import ProcessCamera
 from sensor.camera.haar_like_camera import HaarLikeCamera
+from sensor.camera.binarization_camera import BinarizationCamera
 from sensor.ultrasonic.process_ultrasonic import ProcessUltraSonic
 from get_perfomance_data import get_perfomance_data
 
 
-def run_minicar(camera, ultrasonic):
+def run_minicar(camera, ultrasonic) -> None:
     pwm = Adafruit_PCA9685.PCA9685(address=0x40)
     pwm.set_pwm_freq(60)
     # AWS = AwsConnection()
@@ -28,4 +30,4 @@ def run_minicar(camera, ultrasonic):
 
 
 if __name__ == "__main__":
-    run_minicar(HaarLikeCamera(), ProcessUltraSonic())
+    run_minicar(ProcessCamera(camera_class=HaarLikeCamera, divisions=40), ProcessUltraSonic())

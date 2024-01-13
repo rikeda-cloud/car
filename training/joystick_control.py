@@ -7,7 +7,7 @@ import os
 from decimal import Decimal
 import pygame
 import Adafruit_PCA9685
-
+from multiprocessing import Value, Process
 
 MAX_SPEED = 370
 MIN_SPEED = 350
@@ -15,23 +15,18 @@ MIN_SPEED = 350
 MAX_HANDLE = 450
 MIN_HANDLE = 270
 
-HANDLING = 40
+os.environ["SDL_VIDEODRIVER"] = "dummy"
 
 
 def change_var(var, diff, max, min):
     if min < var + diff and var + diff < max:
         return var + diff
-    elif var + diff <= min:
-        return min
-    else:
-        return max
+    return min if var + diff <= min else max
 
-os.environ["SDL_VIDEODRIVER"] = "dummy"
 
-def joystick_control(handle, speed, is_measure):
+def joystick_control(handle, speed, is_measure) -> None:
     pwm = Adafruit_PCA9685.PCA9685(address=0x40)
     pwm.set_pwm_freq(60)
-
     #モーター
     pwm.set_pwm(14, 0, speed.value)
     #ハンドル
@@ -78,7 +73,6 @@ def joystick_control(handle, speed, is_measure):
                 speed.value = change_var(speed.value, 1, MAX_SPEED, MIN_SPEED)
             pwm.set_pwm(14, 0, speed.value)
 
-
             handle.value = int(360 + s_axe[0] * 70)
             pwm.set_pwm(15, 0, handle.value)
             
@@ -86,16 +80,23 @@ def joystick_control(handle, speed, is_measure):
             pygame.event.get()
 
             time.sleep(0.1)
-            #print("handle = ", handle.value, "speed = ", speed.value)
     except( KeyboardInterrupt, SystemExit): # Exit with Ctrl-C
         print("Exit")
 
 
-def main():
-    joystick_control()
+class JoystickControl():
+    def __init__(self):
+        self.speed = Value('i', 370)
+        self.handle = Value('i', 360)
+        self.is_measure = Value('i', 0)
+        self.process = Process(target=joystick_control, args=[self.handle, self.speed, self.is_measure])
+        self.process.start()
+
+    def __del__(self):
+        self.process.join()
 
 
-from multiprocessing import Value, Process
+from multiprocessing import Value
 if __name__ == "__main__":
     handle = Value('i', 360)
     speed = Value('i', 370)

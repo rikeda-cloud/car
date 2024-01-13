@@ -2,6 +2,8 @@ import datetime
 import json
 import os
 import data_utils.send_data
+form typing import List
+
 
 class JsonBuffer():
     def __init__(self):
@@ -25,14 +27,14 @@ class JsonBuffer():
             json.dump(self.buffer, f)
         self.buffer = []
 
-    def _get_json_files(self):
+    def _get_json_files(self) -> List[str]:
         return [
             self.save_dir + f
             for f in os.listdir(self.save_dir)
             if os.path.isfile(os.path.join(self.save_dir, f))
         ]
 
-    def del_newest_file(self):
+    def del_newest_file(self) -> None:
         json_files = self._get_json_files()
         if json_files == []:
             print("file is None!!")
@@ -41,7 +43,7 @@ class JsonBuffer():
         os.unlink(json_files[0])
         print("newest file is delete!!")
 
-    def send_to_aws(self):
+    def send_to_aws(self) -> None:
         aws_data_module = data_utils.send_data.AwsDataModule()
         json_files = self._get_json_files()
         for file in json_files:
@@ -55,5 +57,5 @@ class JsonBuffer():
 
 if __name__ == '__main__':
     buffer = JsonBuffer()
-    #buffer.del_newest_file()
+    # buffer.del_newest_file()
     buffer.send_to_aws()
