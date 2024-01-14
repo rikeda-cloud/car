@@ -1,16 +1,18 @@
 from picamera2 import Picamera2
+from abc import ABCMeta, abstractmethod
 from typing import List
 import cv2
 
 
-class RaspiCamera():
+class RaspiCamera(metaclass = ABCMeta):
     def __init__(self, divisions):
         self.divisions: int = divisions
+        self.image = None
         self.camera = Picamera2()
         self.camera.start()
-        self.height = 0
-        self.width = 0
-        self.image = None
+        self.capture()
+        self.height, self.width = self.image.shape
+        self.width_step = int(self.width / self.divisions)
         
     def image_to_frame(self):
         _, frame = cv2.imencode('.jpg', self.image)
@@ -24,8 +26,10 @@ class RaspiCamera():
         self.width = width
         self.image = image
 
+    @abstractmethod
     def color_ratio(self) -> List[float]:
-        return [0]
+        pass
 
+    @abstractmethod
     def frame(self):
-        return self.image_to_frame()
+        pass

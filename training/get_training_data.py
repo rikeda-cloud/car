@@ -1,9 +1,11 @@
 import time
 
 
-def get_training_data(color_ratio, ultrasonic, handle, speed):
-    training_data = {}
+def get_training_data(camera, ultrasonic, handle, speed):
+    camera.capture()
+    color_ratio = camera.color_ratio()
     color_ratio = [int(ratio * 1000) for ratio in color_ratio]
+    training_data = {}
     training_data.update(
         ultrasonic.measure(),
         timestamp='{0:.1f}'.format(time.time()),
