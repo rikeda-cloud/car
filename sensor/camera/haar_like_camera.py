@@ -4,7 +4,7 @@ import numpy as np
 
 
 class HaarLikeCamera(RaspiCamera):
-    def __init__(self, divisions=20):
+    def __init__(self, divisions=40):
         super().__init__(divisions)
         self.window_width = 20
         self.rect_height = 20

@@ -1,14 +1,17 @@
+import time
 from typing import List
 from multiprocessing import Array, Process
-from haar_like_camera import HaarLikeCamera
+from sensor.camera.haar_like_camera import HaarLikeCamera
 
 
 def _color_ratio_loop(array, camera_class) -> None:
     camera = camera_class()
     while True:
+        camera.capture()
         color_ratio = camera.color_ratio()
         for i, ratio in enumerate(color_ratio):
-            array[i] = ratio
+            array[i] = int(ratio * 1000)
+        time.sleep(0.05)
 
 
 class ProcessCamera():
@@ -26,4 +29,8 @@ class ProcessCamera():
 
 
 if __name__ == '__main__':
-    pass
+    camera = ProcessCamera()
+    time.sleep(1)
+    while True:
+        print(camera.measure())
+        time.sleep(0.1)

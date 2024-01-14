@@ -3,13 +3,14 @@ from multiprocessing import Value, Process
 from flask import Flask, render_template, Response
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from sensor.camera.process_camera  import ProcessCamera
 from sensor.camera.haar_like_camera import HaarLikeCamera
 from sensor.camera.binarization_camera import BinarizationCamera
-from sensor.ultrasonic.process_ultrasonic import ProcessUltraSonic
+from sensor.ultrasonic.ultrasonic import UltraSonic
 from joystick_control import JoystickControl
+#from joystick_control import joystick_control
 from get_training_data import get_training_data
 from json_buffer import JsonBuffer
+from multiprocessing import Value, Process
 
 
 app = Flask(__name__)
@@ -36,21 +37,23 @@ def generate(camera, ultrasonic, joystick):
                 buffer.add(data)
         elif buffer.is_empty() == False:
             buffer.save()
-        frame = camera.frame()
-        yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-        print("time = ", time.time() - start)
+        #frame = camera.frame()
+        #yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+        #print("time = ", time.time() - start)
 
 @app.route('/feed')
 def feed():
-    return Response(generate(ProcessCamera(camera_class=HaarLikeCamera, divisions=40), ProcessUltraSonic(), JoystickControl()),
+    return Response(generate(HaarLikeCamera(), UltraSonic(), JoystickControl()),
             mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 def main():
-    try:
-        app.run(host=sys.argv[1], debug=False)
-    except:
-        print('コマンドライン引数にラズパイのipアドレスを指定してください')
+    generate(HaarLikeCamera(), UltraSonic(), JoystickControl())
+    #app.run(host=sys.argv[1], debug=False)
+    #try:
+    #    app.run(host=sys.argv[1], debug=False)
+    #except:
+    #    print('コマンドライン引数にラズパイのipアドレスを指定してください')
 
 if __name__ == '__main__':
     main()

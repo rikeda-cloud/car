@@ -8,6 +8,7 @@ from decimal import Decimal
 import pygame
 import Adafruit_PCA9685
 from multiprocessing import Value, Process
+from json_buffer import JsonBuffer
 
 MAX_SPEED = 370
 MIN_SPEED = 350
@@ -25,6 +26,7 @@ def change_var(var, diff, max, min):
 
 
 def joystick_control(handle, speed, is_measure) -> None:
+    j = JsonBuffer()
     pwm = Adafruit_PCA9685.PCA9685(address=0x40)
     pwm.set_pwm_freq(60)
     #モーター
@@ -63,6 +65,9 @@ def joystick_control(handle, speed, is_measure) -> None:
             # コントローラRBでデータ取得スイッチをoff
             if s_btn[5] == 1:
                 is_measure.value = 0
+            
+            if s_btn[6] == 1:
+                j.del_newest_file()
 
             if s_btn[2] == 1:
                 diff = -1 if speed.value != MAX_SPEED else -10
@@ -79,6 +84,7 @@ def joystick_control(handle, speed, is_measure) -> None:
             #pygame.event.pump()
             pygame.event.get()
 
+            #print(handle.value, speed.value)
             time.sleep(0.1)
     except( KeyboardInterrupt, SystemExit): # Exit with Ctrl-C
         print("Exit")
