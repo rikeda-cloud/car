@@ -12,15 +12,11 @@ from json_buffer import JsonBuffer
 
 def training(camera, ultrasonic, joystick):
     buffer = JsonBuffer()
-    count = 0
     while True:
-        count += 1
-        if joystick.is_measure.value == False:
-            if  count % 10 == 0:
-                count = 0
-                data = get_training_data(camera, ultrasonic, joystick.handle, joystick.speed)
-                print(data)
-                buffer.add(data)
+        if joystick.is_measure.value == True:
+            data = get_training_data(camera, ultrasonic, joystick.handle, joystick.speed)
+            print(data)
+            buffer.add(data)
         elif buffer.is_empty() == False:
             buffer.save()
 

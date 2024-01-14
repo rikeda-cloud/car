@@ -32,6 +32,7 @@ class UltraSonic():
         return d
         
     def measure(self) -> dict[str, str]:
+        GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BOARD)
         for i in range(self.number_of_sensor):
             GPIO.setup(self.TRIG_PIN[i], GPIO.OUT, initial=0),
