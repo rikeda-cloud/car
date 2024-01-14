@@ -12,7 +12,7 @@ class RaspiCamera(metaclass = ABCMeta):
         self.camera.start()
         self.capture()
         self.height, self.width = self.image.shape
-        self.width_step = int(self.width / self.divisions)
+        self.width_step: float = self.width / self.divisions
         
     def image_to_frame(self):
         _, frame = cv2.imencode('.jpg', self.image)

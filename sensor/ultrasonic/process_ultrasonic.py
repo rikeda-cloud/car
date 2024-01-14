@@ -19,13 +19,13 @@ def _async_measure(ipt) -> float:
     GPIO.setup(echo, GPIO.IN)
 
     try:
-        GPIO.output(trig, 1) #Trigピンの電圧をHIGH(3.3V)にする
-        time.sleep(0.00001) #10μs待つ
-        GPIO.output(trig, 0) #Trigピンの電圧をLOW(0V)にする
+        GPIO.output(trig, 1) # Trigピンの電圧をHIGH(3.3V)にする
+        time.sleep(0.00001) # 10us待つ
+        GPIO.output(trig, 0) # Trigピンの電圧をLOW(0V)にする
 
         sigon = _mesure_time(0, echo, timeout)
         sigoff = _mesure_time(1, echo, timeout)
-        d = (sigoff - sigon) * 34000 / 2 #距離を計算(単位はcm)
+        d = (sigoff - sigon) * 34000 / 2 # 距離を計算(単位はcm)
         if d < 0 or 400 < d:
             d = 400 #距離が400cm以上または0以下(timeoutで不正な値となった場合)は400cmを返す
     except:
