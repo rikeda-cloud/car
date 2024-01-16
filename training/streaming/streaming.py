@@ -5,9 +5,9 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../sensor/camera'))
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../sensor/ultrasonic'))
 from haar_like_camera import HaarLikeCamera
-from binarization_camera import BinarizationCamera
-from ultrasonic import UltraSonic
-from process_camera import ProcessCamera
+#from binarization_camera import BinarizationCamera
+#from ultrasonic import UltraSonic
+from process_ultrasonic import ProcessUltraSonic
 from get_training_data import get_training_data
 
 
@@ -31,7 +31,7 @@ def generate(camera, ultrasonic):
 
 @app.route('/feed')
 def feed():
-    return Response(generate(HaarLikeCamera(), UltraSonic()),
+    return Response(generate(HaarLikeCamera(divisions=100, rect_height=10), ProcessUltraSonic()),
             mimetype='multipart/x-mixed-replace; boundary=frame')
 
 

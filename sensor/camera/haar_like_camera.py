@@ -5,9 +5,9 @@ import time
 
 
 class HaarLikeCamera(RaspiCamera):
-    def __init__(self, divisions=100):
+    def __init__(self, divisions=100, rect_height=20):
         super().__init__(divisions)
-        self.rect_height = 20
+        self.rect_height = rect_height
         self.relative_pos = None
 
     def __calc_haar_like(self, image) -> float:
