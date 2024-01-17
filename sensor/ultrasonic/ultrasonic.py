@@ -50,6 +50,6 @@ if __name__ == '__main__':
             result = ultrasonic.measure()
             print(result)
             print(time.time() - start)
-            #time.sleep(1)
+            time.sleep(1)
     except:
         print("exit")

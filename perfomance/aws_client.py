@@ -13,7 +13,7 @@ def convert_intlist_to_byte(int_array):
 
 #needs ~/.aws/credentials
 
-ENDPOINT_NAME = "built-in-algo-lightgbm-regression-model-2024-01-13-09-30-27-219"
+ENDPOINT_NAME = "built-in-algo"
 
 def invoke_api(int_array):
     client = boto3.client('sagemaker-runtime')
@@ -27,8 +27,19 @@ def invoke_api(int_array):
     )
     body = response['Body']
     res = json.load(body)
-    
-    return int(res["prediction"][0])
+    values = res["probabilities"][0]
+    max_index = values.index(max(values))
 
-# test invoke_api(body)
-# print(convert_intlist_to_byte([1, 58, 0, 0, 146]))
+    if max_index == 0:
+        handle = 290
+    elif max_index == 6:
+        handle = 430
+    else:
+        handle = (max_index * 20) + 300
+    speed_adjust = abs(handle - 360) * 0.1
+    return [int(handle), int(speed_adjust), values[max_index]]
+
+
+if __name__ == "__main__":
+    invoke_api(body)
+    print(convert_intlist_to_byte([1, 58, 0, 0, 146]))

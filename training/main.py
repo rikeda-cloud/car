@@ -23,4 +23,4 @@ def training(camera, ultrasonic):
 
 
 if __name__ == '__main__':
-    training(HaarLikeCamera(divisions=80, rect_height=10), ProcessUltraSonic(pool_size=2))
+    training(HaarLikeCamera(divisions=40, rect_height=20), ProcessUltraSonic(pool_size=2))

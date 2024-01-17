@@ -35,7 +35,7 @@ def _async_measure(ipt) -> float:
     
 
 class ProcessUltraSonic(UltraSonic):
-    def __init__(self, timeout=0.10, pool_size=2):
+    def __init__(self, timeout=0.05, pool_size=2):
         super().__init__(timeout)
         self.pool = Pool(pool_size)
 

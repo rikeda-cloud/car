@@ -24,7 +24,7 @@ class BinarizationCamera(RaspiCamera):
             color_ratio.append(np.sum(divide_image < self.threshold) / divide_image.size)
         return color_ratio
 
-    def frame(self):
+    def frame(self) -> bytes:
         height, _ = self.__get_target_shape()
         self.image[height:, :] = (self.image[height:, :] > self.threshold) * 255
         return self.image_to_frame()

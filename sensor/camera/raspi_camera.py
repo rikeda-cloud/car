@@ -31,5 +31,5 @@ class RaspiCamera(metaclass = ABCMeta):
         pass
 
     @abstractmethod
-    def frame(self):
+    def frame(self) -> bytes:
         pass
