@@ -4,21 +4,21 @@ from multiprocessing import Array, Process
 from haar_like_camera import HaarLikeCamera
 
 
-def _color_ratio_loop(array, camera_class, divisions) -> None:
-    camera = camera_class(divisions)
+def _color_ratio_loop(array, camera_class, divisions, rect_height) -> None:
+    camera = camera_class(divisions=divisions, rect_height=rect_height)
     while True:
         camera.capture()
         color_ratio = camera.color_ratio()
         for i, ratio in enumerate(color_ratio):
             array[i] = ratio
-        time.sleep(0.05)
+        #time.sleep(0.05)
 
 
 class ProcessCamera():
-    def __init__(self, camera_class=HaarLikeCamera, divisions=100):
+    def __init__(self, camera_class=HaarLikeCamera, divisions=40, rect_height=20):
         self.divisions: int = divisions
         self.array = Array('d', divisions)
-        self.process = Process(target=_color_ratio_loop, args=(self.array, camera_class, divisions))
+        self.process = Process(target=_color_ratio_loop, args=(self.array, camera_class, divisions, rect_height))
         self.process.start()
         time.sleep(1)
 

@@ -11,7 +11,7 @@ from multiprocessing import Value, Process
 from json_buffer import JsonBuffer
 
 MAX_SPEED = 370
-MIN_SPEED = 350
+MIN_SPEED = 363
 
 MAX_HANDLE = 450
 MIN_HANDLE = 270

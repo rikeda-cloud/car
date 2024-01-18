@@ -15,12 +15,14 @@ def training(camera, ultrasonic):
     buffer = JsonBuffer()
     while True:
         if joystick.is_measure.value == True:
+            #s = time.time()
             data = get_training_data(camera, ultrasonic, joystick)
             print(data)
             buffer.add(data)
+            #print(time.time() - s)
         elif buffer.is_empty() == False:
             buffer.save()
 
 
 if __name__ == '__main__':
-    training(HaarLikeCamera(divisions=40, rect_height=20), ProcessUltraSonic(pool_size=2))
+    training(HaarLikeCamera(divisions=40, rect_height=20), ProcessUltraSonic(timeout=0.10, pool_size=2))
