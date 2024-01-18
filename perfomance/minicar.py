@@ -19,7 +19,7 @@ def _run(handle, speed):
             pwm.set_pwm(14, 0, speed.value)
             pwm.set_pwm(15, 0, handle.value)
 #            print(speed.value, handle.value)
-            time.sleep(0.01)  # ここを適切な時間間隔に設定してください
+            time.sleep(0.001)  # ここを適切な時間間隔に設定してください
     except(KeyboardInterrupt, SystemExit):
         print("Exit")
         pwm.set_pwm(14, 0, 370)
