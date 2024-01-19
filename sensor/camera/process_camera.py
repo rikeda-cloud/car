@@ -34,7 +34,7 @@ def _color_ratio_loop(array, camera_class, divisions, rect_height, model, speed,
     while True:
         camera.capture()
         color_ratio = camera.color_ratio()
-        _drive(color_ratio, model, speed, handle, base_speed)
+        #_drive(color_ratio, model, speed, handle, base_speed)
         for i, ratio in enumerate(color_ratio):
             array[i] = ratio
         #time.sleep(0.05)

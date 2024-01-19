@@ -11,7 +11,8 @@ class GetPerfomanceData():
         _func_dict_for_model = {
             'model_v1': self._simple_data,
             'model_v2': self._simple_data,
-            'model_v3': self._plus_color_ratio_diff
+            'model_v3': self._plus_color_ratio_diff,
+            'slide_model_v1': self._plus_color_ratio_diff
         }
         return _func_dict_for_model[model]
 
