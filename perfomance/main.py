@@ -29,7 +29,7 @@ def run_minicar(car, camera, ultrasonic) -> None:
 
 
 if __name__ == "__main__":
-    car = MiniCar(base_speed=354, model="model_v3")
+    car = MiniCar(base_speed=352, model="only_camera_model_v2")
     camera = HaarLikeCamera(divisions=40, rect_height=20)
     #camera = ProcessCamera(model="model_v1", speed=car.speed, handle=car.handle, base_speed=355, divisions=40, rect_height=20)
     ultrasonic = ProcessUltraSonic(pool_size=2, timeout=0.10)

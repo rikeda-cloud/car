@@ -45,6 +45,12 @@ class MiniCar():
         predict = self.model.predict(df)
         return predict
 
+    def _speed_predict(self, data: List[int]) -> List[float]:
+        df = pd.DataFrame(data)
+        df = df.T
+        predict = self.speed_model.predict(df)
+        return predict
+
     def drive(self, data: List[int]) -> None:
         predict = self._predict(data)
 
@@ -57,8 +63,4 @@ class MiniCar():
         else:
             handle = (max_index * 20) + 300
         self.handle.value = handle
-        #self.speed.value = self.base_speed + int(abs(handle - 360) / 8)
-        if handle == 360:
-            self.speed.value = self.base_speed
-        else:
-            self.speed.value = self.base_speed + int(10 * (1 - math.exp(1 / abs(handle - 360))))
+        self.speed.value = self.base_speed + int(abs(handle - 360) / 10)
