@@ -18,7 +18,9 @@ class GetPerfomanceData():
             'time_model': self._plus_pre_data,
             'only_camera_model_v2': self._camera_div,
             'time7_only_camera_model': self._camera_time7,
-            'speed_model_v1': self._camera_div
+            'speed_model_v1': self._camera_div,
+            'only_camera_model_v3': self._only_camera_v3,
+            'c_d4_model_v1': self._ultrasonic4_model_v1
         }
         return _func_dict_for_model[model]
 
@@ -31,6 +33,9 @@ class GetPerfomanceData():
     def __get_ultrasonic(self, ultrasonic) -> List[int]:
         ultrasonic_dict = ultrasonic.measure()
         ultrasonic_list = [int(value) for value in ultrasonic_dict.values()]
+        for i in range(len(ultrasonic_list)):
+            if ultrasonic_list[i] == -10:
+                ultrasonic_list[i] = 1000
         return ultrasonic_list
 
     def _simple_data(self, camera, ultrasonic) -> List[int]:
@@ -122,4 +127,94 @@ class GetPerfomanceData():
             result.append(
                 int(self.pre_data[0][(i * 5) + 4] - self.pre_data[0][((i + 1) * 5) + 4])
             )
+        return result
+
+    def _only_camera_v3(self, camera, ultrasonic) -> List[int]:
+        result = self.__get_color_ratio(camera)
+        #  diff
+        result.append(int(result[0] - result[39]))
+        result.append(int(result[0] - result[19]))
+        result.append(int(result[19] - result[39]))
+        result.append(int(result[0] - result[9]))
+        for i in range(1, 4):
+            result.append(int(result[(i * 10) - 1] - result[(i * 10) + 9]))
+        result.append(int(result[0] - result[4]))
+        for i in range(1, 8):
+            result.append(int(result[(i * 5) - 1] - result[(i * 5) + 4]))
+        #  div
+        try:
+            result.append(result[0] / result[39])
+        except:
+            result.append(1.0)
+        try:
+            result.append(result[0] / result[19])
+        except:
+            result.append(1.0)
+        try:
+            result.append(result[19] / result[39])
+        except:
+            result.append(1.0)
+        try:
+            result.append(result[0] / result[9])
+        except:
+            result.append(1.0)
+        for i in range(1, 4):
+            try:
+                result.append(result[(i * 10) - 1] / result[(i * 10) + 9])
+            except:
+                result.append(1.0)
+        try:
+            result.append(result[0] - result[4])
+        except:
+            result.append(1.0)
+        for i in range(1, 8):
+            try:
+                result.append(result[(i * 5) - 1] - result[(i * 5) + 4])
+            except:
+                result.append(1.0)
+        return result
+
+    def _ultrasonic4_model_v1(self, camera, ultrasonic) -> List[int]:
+        result = self.__get_color_ratio(camera) + self.__get_ultrasonic(ultrasonic)
+        #  diff
+        result.append(int(result[0] - result[39]))
+        result.append(int(result[0] - result[19]))
+        result.append(int(result[19] - result[39]))
+        result.append(int(result[0] - result[9]))
+        for i in range(1, 4):
+            result.append(int(result[(i * 10) - 1] - result[(i * 10) + 9]))
+        result.append(int(result[0] - result[4]))
+        for i in range(1, 8):
+            result.append(int(result[(i * 5) - 1] - result[(i * 5) + 4]))
+        #  div
+        try:
+            result.append(result[0] / result[39])
+        except:
+            result.append(1.0)
+        try:
+            result.append(result[0] / result[19])
+        except:
+            result.append(1.0)
+        try:
+            result.append(result[19] / result[39])
+        except:
+            result.append(1.0)
+        try:
+            result.append(result[0] / result[9])
+        except:
+            result.append(1.0)
+        for i in range(1, 4):
+            try:
+                result.append(result[(i * 10) - 1] / result[(i * 10) + 9])
+            except:
+                result.append(1.0)
+        try:
+            result.append(result[0] - result[4])
+        except:
+            result.append(1.0)
+        for i in range(1, 8):
+            try:
+                result.append(result[(i * 5) - 1] - result[(i * 5) + 4])
+            except:
+                result.append(1.0)
         return result
