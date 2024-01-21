@@ -9,7 +9,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '../sensor/ultrasonic'))
 from haar_like_camera import HaarLikeCamera
 from process_ultrasonic import ProcessUltraSonic
 from minicar import MiniCar
-from json_buffer import JsonBuffer
+#from json_buffer import JsonBuffer
 
 
 def run_minicar(car, camera, ultrasonic) -> None:
@@ -20,7 +20,7 @@ def run_minicar(car, camera, ultrasonic) -> None:
             perfomance_data: List[int] = car.get_perfomance_data.get_perfomance_data(camera, ultrasonic)
             car.drive(perfomance_data)
             print(perfomance_data)
-            buffer.add(perfomance_data)
+            #buffer.add(perfomance_data)
             #print(time.time() - s)
     except(KeyboardInterrupt, SystemExit):
         buffer.save()
@@ -28,7 +28,7 @@ def run_minicar(car, camera, ultrasonic) -> None:
 
 
 if __name__ == "__main__":
-    #car = MiniCar(base_speed=353, model="only_camera_model_v3")
+    #car = MiniCar(base_speed=353, model="2500cm_model")
     #ultrasonic = ProcessUltraSonic(pool_size=2, timeout=0.035)
 
     # dist4 model only

@@ -1,0 +1,63 @@
+カメラデータのみのモデルです。
+特徴量エンジニアリングを行ってカラムを追加しています。
+確率を返します。
+Feature:c_div_x0_x1 は x0 / x1 データを使用しています 
+
+Feature:c_01, Importance:6218
+Feature:c_02, Importance:7171
+Feature:c_03, Importance:6780
+Feature:c_04, Importance:6537
+Feature:c_05, Importance:5256
+Feature:c_06, Importance:6101
+Feature:c_07, Importance:6177
+Feature:c_08, Importance:6023
+Feature:c_09, Importance:6050
+Feature:c_10, Importance:4372
+Feature:c_11, Importance:5801
+Feature:c_12, Importance:5843
+Feature:c_13, Importance:6109
+Feature:c_14, Importance:5622
+Feature:c_15, Importance:4468
+Feature:c_16, Importance:5750
+Feature:c_17, Importance:5599
+Feature:c_18, Importance:5506
+Feature:c_19, Importance:5351
+Feature:c_20, Importance:4244
+Feature:c_21, Importance:5638
+Feature:c_22, Importance:5467
+Feature:c_23, Importance:5464
+Feature:c_24, Importance:5548
+Feature:c_25, Importance:4408
+Feature:c_26, Importance:5474
+Feature:c_27, Importance:5362
+Feature:c_28, Importance:5633
+Feature:c_29, Importance:5162
+Feature:c_30, Importance:4474
+Feature:c_31, Importance:5704
+Feature:c_32, Importance:5789
+Feature:c_33, Importance:5437
+Feature:c_34, Importance:6010
+Feature:c_35, Importance:4703
+Feature:c_36, Importance:6223
+Feature:c_37, Importance:6741
+Feature:c_38, Importance:6654
+Feature:c_39, Importance:7084
+Feature:c_40, Importance:6229
+Feature:c_diff_01_40, Importance:8353
+Feature:c_diff_01_05, Importance:5615
+Feature:c_diff_05_10, Importance:5695
+Feature:c_diff_10_15, Importance:5497
+Feature:c_diff_15_20, Importance:5708
+Feature:c_diff_20_25, Importance:5802
+Feature:c_diff_25_30, Importance:5888
+Feature:c_diff_30_35, Importance:5851
+Feature:c_diff_35_40, Importance:6591
+Feature:c_div_01_40, Importance:7374
+Feature:c_div_01_05, Importance:8936
+Feature:c_div_05_10, Importance:8527
+Feature:c_div_10_15, Importance:8459
+Feature:c_div_15_20, Importance:8746
+Feature:c_div_20_25, Importance:8612
+Feature:c_div_25_30, Importance:9383
+Feature:c_div_30_35, Importance:9118
+Feature:c_div_35_40, Importance:9081
