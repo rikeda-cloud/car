@@ -1,5 +1,4 @@
 import time
-import math
 from multiprocessing import Value, Process
 from typing import List
 import Adafruit_PCA9685
@@ -28,8 +27,8 @@ def _run(handle, speed):
 
 class MiniCar():
     def __init__(self, model='model_v1', base_speed=360):
-        self.speed = Value('i', 370)  # 370がスピード0
-        self.handle = Value('i', 360)  # 360が車体に対して平行なタイヤの向き
+        self.speed = Value('i', 370)  #  370がスピード0
+        self.handle = Value('i', 360)  #  360が車体に対して平行なタイヤの向き
         self.base_speed = base_speed
         self.process = Process(target=_run, args=[self.handle, self.speed])
         self.process.start()
@@ -43,12 +42,6 @@ class MiniCar():
         df = pd.DataFrame(data)
         df = df.T
         predict = self.model.predict(df)
-        return predict
-
-    def _speed_predict(self, data: List[int]) -> List[float]:
-        df = pd.DataFrame(data)
-        df = df.T
-        predict = self.speed_model.predict(df)
         return predict
 
     def drive(self, data: List[int]) -> None:
