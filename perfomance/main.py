@@ -13,27 +13,27 @@ from minicar import MiniCar
 
 
 def run_minicar(car, camera, ultrasonic) -> None:
-    buffer = JsonBuffer()
+    #buffer = JsonBuffer()
     try:
         while True:
             #s = time.time()
             perfomance_data: List[int] = car.get_perfomance_data.get_perfomance_data(camera, ultrasonic)
-            car.drive(perfomance_data)
+            car.drive(perfomance_data, ultrasonic.number_of_sensor)
             print(perfomance_data)
             #buffer.add(perfomance_data)
             #print(time.time() - s)
     except(KeyboardInterrupt, SystemExit):
-        buffer.save()
+        #buffer.save()
         print("Exit and Save")
 
 
 if __name__ == "__main__":
-    #car = MiniCar(base_speed=353, model="2500cm_model")
-    #ultrasonic = ProcessUltraSonic(pool_size=2, timeout=0.035)
-
-    # dist4 model only
     car = MiniCar(base_speed=350, model="c_d4_model_v1")
-    ultrasonic = ProcessUltraSonic(pool_size=2, timeout=0.035, echo_pin=[15, 21, 31, 33], trig_pin=[16, 22, 32, 35])
-
     camera = HaarLikeCamera(divisions=40, rect_height=20)
+
+    ## センサーを使用する数によって以下のコメントアウトを解除して使用してください
+    #ultrasonic = ProcessUltraSonic(pool_size=2, timeout=0.035, echo_pin=[], trig_pin=[]) # センサーを使用しない
+    ultrasonic = ProcessUltraSonic(pool_size=2, timeout=0.035, echo_pin=[15, 21, 31, 33], trig_pin=[16, 22, 32, 35]) # センサーを4つ使用するモデル
+    #ultrasonic = ProcessUltraSonic(pool_size=2, timeout=0.035) # センサーを10個使用するモデル
+
     run_minicar(car, camera, ultrasonic)

@@ -8,6 +8,11 @@ import numpy as np
 from get_perfomance_data import GetPerfomanceData
 
 
+# ショートカットを通る時のセンサーの閾値値
+# nは 10分の1でcmになります ex) n=1000 == 100cm
+S_SHAPED_THRESHOLD = 300
+
+
 def _run(handle, speed):
     pwm = Adafruit_PCA9685.PCA9685(address=0x40)
     pwm.set_pwm_freq(60)
@@ -38,17 +43,7 @@ class MiniCar():
     def __del__(self):
         self.process.join()
 
-    def _predict(self, data: List[int]) -> List[float]:
-        df = pd.DataFrame(data)
-        df = df.T
-        predict = self.model.predict(df)
-        return predict
-
-    def drive(self, data: List[int]) -> None:
-        predict = self._predict(data)
-
-        max_index = np.argmax(predict)
-        #print(predict, predict[0][max_index])
+    def _determine_handle(self, max_index) -> int:
         if max_index == 0:
             handle = 290
         elif max_index == 6:
@@ -56,4 +51,30 @@ class MiniCar():
         else:
             handle = (max_index * 20) + 300
         self.handle.value = handle
-        self.speed.value = self.base_speed + int(abs(handle - 360) / 10)
+        return handle
+
+    def _determine_speed(self, handle: int, ultrasonic_data: list, number_of_sensor: int) -> int:
+        count = 0
+        for data in ultrasonic_data:
+            if data < S_SHAPED_THRESHOLD:
+                count += 1
+        if count != 0 and int(number_of_sensor / 4) * 3 <= count:
+            deceleration = ((370 - self.base_speed) / 5) * 3
+        else:
+            deceleration = abs(handle - 360) / 10
+        return self.base_speed + int(deceleration)
+
+    def _predict(self, data: List[int]) -> List[float]:
+        df = pd.DataFrame(data)
+        df = df.T
+        predict = self.model.predict(df)
+        return predict
+
+    def drive(self, data: List[int], number_of_sensor: int) -> None:
+        predict = self._predict(data)
+        max_index = np.argmax(predict)
+        handle = self._determine_handle(max_index)
+        speed = self._determine_speed(handle, data[40: 40 + number_of_sensor], number_of_sensor)
+        self.handle.value = handle
+        self.speed.value = speed
+        print("speed = ", speed)
