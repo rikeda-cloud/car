@@ -54,14 +54,15 @@ class MiniCar():
         return handle
 
     def _determine_speed(self, handle: int, ultrasonic_data: list, number_of_sensor: int) -> int:
-        count = 0
-        for data in ultrasonic_data:
-            if data < S_SHAPED_THRESHOLD:
-                count += 1
-        if count != 0 and int(number_of_sensor / 4) * 3 <= count:
-            deceleration = ((370 - self.base_speed) / 5) * 3
-        else:
-            deceleration = abs(handle - 360) / 10
+        #count = 0
+        #for data in ultrasonic_data:
+        #    if data < S_SHAPED_THRESHOLD:
+        #        count += 1
+        #if count != 0 and int(number_of_sensor / 4) * 3 <= count:
+        #    deceleration = ((370 - self.base_speed) / 5) * 3
+        #else:
+        #    deceleration = abs(handle - 360) / 10
+        deceleration = abs(handle - 360) / 10
         return self.base_speed + int(deceleration)
 
     def _predict(self, data: List[int]) -> List[float]:

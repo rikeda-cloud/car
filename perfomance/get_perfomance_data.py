@@ -31,7 +31,8 @@ class GetPerfomanceData():
             'speed_model_v1': self._camera_div,
             'only_camera_model_v3': self._only_camera_v3,
             'c_d4_model_v1': self._ultrasonic4_model_v1,
-            '2500cm_model': self._model_25
+            '2500cm_model': self._model_25,
+            'only_camera_model_v4': self._camera_div,
         }
         return _func_dict_for_model[model]
 
