@@ -78,4 +78,4 @@ class MiniCar():
         speed = self._determine_speed(handle, data[40: 40 + number_of_sensor], number_of_sensor)
         self.handle.value = handle
         self.speed.value = speed
-        print("speed = ", speed)
+        #print("speed = ", speed)
