@@ -49,6 +49,10 @@ class MiniCar():
             handle = 290
         elif 410 <= value:
             handle = 430
+        elif value < 350:
+            handle = int(value - 5)
+        elif 370 < value:
+            handle = int(value + 5)
         else:
             handle = int(value)
         self.handle.value = handle
@@ -78,7 +82,7 @@ class MiniCar():
         #max_index = np.argmax(predict)
         predict_speed = self._predict(data, self.model_speed)
         handle = self._determine_handle(predict)
-        speed = int(predict_speed - 10)
+        speed = int(predict_speed - 11)
         #speed = self._determine_speed(handle, data[40: 40 + number_of_sensor], number_of_sensor)
         self.handle.value = handle
         self.speed.value = speed
