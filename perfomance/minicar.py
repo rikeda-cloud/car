@@ -40,14 +40,15 @@ class MiniCar():
         self.get_perfomance_data = GetPerfomanceData(model)
         self.model = pickle.load(open('./models/' + model + '.pkl', 'rb'))
         self.model_speed = pickle.load(open('./models/' + "speed_model_v1" + '.pkl', 'rb'))
+        self.model_handle = pickle.load(open('./models/' + "only_camera_model_v2" + '.pkl', 'rb'))
 
     def __del__(self):
         self.process.join()
 
-    def _determine_handle(self, value) -> int:
-        if value <= 310:
+    def _determine_handle(self, value, max_idx) -> int:
+        if max_idx == 0:
             handle = 290
-        elif 410 <= value:
+        elif max_idx == 6:
             handle = 430
         elif value < 350:
             handle = int(value - 5)
@@ -79,10 +80,11 @@ class MiniCar():
 
     def drive(self, data: List[int], number_of_sensor: int) -> None:
         predict = self._predict(data, self.model)
-        #max_index = np.argmax(predict)
+        predict_handle = self._predict(data, self.model_handle)
+        max_index = np.argmax(predict_handle)
         predict_speed = self._predict(data, self.model_speed)
-        handle = self._determine_handle(predict)
-        speed = int(predict_speed - 11)
+        handle = self._determine_handle(predict, max_index)
+        speed = int(predict_speed - 5)
         #speed = self._determine_speed(handle, data[40: 40 + number_of_sensor], number_of_sensor)
         self.handle.value = handle
         self.speed.value = speed
