@@ -33,6 +33,9 @@ class GetPerfomanceData():
             'c_d4_model_v1': self._ultrasonic4_model_v1,
             '2500cm_model': self._model_25,
             'only_camera_model_v4': self._camera_div,
+            'only_camera_model_v5': self._camera_div,
+            'only_camera_model_v6': self._camera_div,
+            'c_d4_model_v2': self._ultrasonic4_model_v2,
         }
         return _func_dict_for_model[model]
 
@@ -172,4 +175,18 @@ class GetPerfomanceData():
         result = self.__get_color_ratio(camera) + self.__get_ultrasonic(ultrasonic, no_data_default=2500, limit=2500)
         result += self.__get_color_ratio_diff(result)
         result += self.__get_color_ratio_div(result)
+        return result
+
+    def _ultrasonic4_model_v2(self, camera, ultrasonic) -> List:
+        result = self.__get_color_ratio(camera) + self.__get_ultrasonic(ultrasonic)
+        result.append(int(result[0] - result[39]))
+        result.append(int(result[0] - result[4]))
+        for i in range(7):
+            result.append(
+                int(result[(i * 5) + 4] - result[((i + 1) * 5) + 4])
+            )
+        result.append(_div_with_error_handling(result[0], result[39]))
+        result.append(_div_with_error_handling(result[0], result[4]))
+        for i in range(7):
+            result.append(_div_with_error_handling(result[(i * 5) + 4], result[((i + 1) * 5) + 4]))
         return result

@@ -1,30 +1,31 @@
 #! /bin/bash
 
-V1='only_camera_model_v1'
-V2='only_camera_model_v2'
+v2='only_camera_model_v2'
+v6='only_camera_model_v6'
 c_d4='c_d4_model_v1'
+c_d4_2='c_d4_model_v2'
 
 if [ $# != 1 ] ; then
     echo "please argument [run [1 ~ 9]]"
     exit 1
 elif [ $1 == '1' ] ; then
-    python3 main.py $v2 '346' # チャレンジモデル
+    python3 main.py $v2 '346'
 elif [ $1 == '2' ] ; then
-    python3 main.py $v2 '344' # チャレンジモデル
+    python3 main.py $v2 '348'
 elif [ $1 == '3' ] ; then
-    python3 main.py $v2 '345' # ?
+    python3 main.py $v2 '350'
 elif [ $1 == '4' ] ; then
-    python3 main.py $v2 '348' # ?
+    python3 main.py $v2 '353'
 elif [ $1 == '5' ] ; then
-    python3 main.py $v2 '350' # 安定?
+    python3 main.py $v6 '346'
 elif [ $1 == '6' ] ; then
-    python3 main.py $v2 '352'  # normalモデル
+    python3 main.py $v6 '348'
 elif [ $1 == '7' ] ; then
-    python3 main.py $v2 '353' # 安定モデル
+    python3 main.py $v6 '350'
 elif [ $1 == '8' ] ; then
-    python3 main.py $c_d4 '353' # 安定し、ノイズに強いモデル
+    python3 main.py $v6 '352'
 elif [ $1 == '9' ] ; then
-    python3 main.py $c_d4 '355' # 安定し、ノイズにvery強いモデル
+    python3 main.py $c_d4 '353'
 else
     echo "please argument [1 ~ 9]"
     exit 1
