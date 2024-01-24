@@ -36,6 +36,7 @@ class GetPerfomanceData():
             'only_camera_model_v5': self._camera_div,
             'only_camera_model_v6': self._camera_div,
             'c_d4_model_v2': self._ultrasonic4_model_v2,
+            'reg_only_camera_model': self._camera_div,
         }
         return _func_dict_for_model[model]
 

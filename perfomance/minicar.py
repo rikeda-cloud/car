@@ -39,17 +39,18 @@ class MiniCar():
         self.process.start()
         self.get_perfomance_data = GetPerfomanceData(model)
         self.model = pickle.load(open('./models/' + model + '.pkl', 'rb'))
+        self.model_speed = pickle.load(open('./models/' + "speed_model_v1" + '.pkl', 'rb'))
 
     def __del__(self):
         self.process.join()
 
-    def _determine_handle(self, max_index) -> int:
-        if max_index == 0:
+    def _determine_handle(self, value) -> int:
+        if value <= 310:
             handle = 290
-        elif max_index == 6:
+        elif 410 <= value:
             handle = 430
         else:
-            handle = (max_index * 20) + 300
+            handle = int(value)
         self.handle.value = handle
         return handle
 
@@ -62,20 +63,23 @@ class MiniCar():
         #    deceleration = ((370 - self.base_speed) / 5) * 3
         #else:
         #    deceleration = abs(handle - 360) / 10
-        deceleration = abs(handle - 360) / 10
+        #deceleration = 0
+        deceleration = abs(handle - 360) / 20
         return self.base_speed + int(deceleration)
 
-    def _predict(self, data: List[int]) -> List[float]:
+    def _predict(self, data: List[int], model) -> List[float]:
         df = pd.DataFrame(data)
         df = df.T
-        predict = self.model.predict(df)
+        predict = model.predict(df)
         return predict
 
     def drive(self, data: List[int], number_of_sensor: int) -> None:
-        predict = self._predict(data)
-        max_index = np.argmax(predict)
-        handle = self._determine_handle(max_index)
-        speed = self._determine_speed(handle, data[40: 40 + number_of_sensor], number_of_sensor)
+        predict = self._predict(data, self.model)
+        #max_index = np.argmax(predict)
+        predict_speed = self._predict(data, self.model_speed)
+        handle = self._determine_handle(predict)
+        speed = int(predict_speed - 10)
+        #speed = self._determine_speed(handle, data[40: 40 + number_of_sensor], number_of_sensor)
         self.handle.value = handle
         self.speed.value = speed
         #print("speed = ", speed)
