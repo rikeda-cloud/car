@@ -47,12 +47,12 @@ class MiniCar():
         #     handle = 290
         # elif max_index == 6:
         #     handle = 430
-        if predict_base < 350:
-            handle = base_handle - 5
-        elif 370 < predict_base:
-            handle = base_handle + 5
-        else:
-            handle = base_handle
+        # if predict_base < 350:
+        #     handle = base_handle - 5
+        # elif 370 < predict_base:
+        #     handle = base_handle + 5
+        # else:
+        handle = base_handle
         self.handle.value = handle
         return int(handle)
 
