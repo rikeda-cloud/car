@@ -41,13 +41,13 @@ class MiniCar():
         self.process.join()
 
     def _determine_handle(self, predict_base, predict_handle) -> int:
-        max_index = np.argmax(predict_handle)
+        # max_index = np.argmax(predict_handle)
         base_handle = int(predict_base)
-        if max_index == 0:
-            handle = 290
-        elif max_index == 6:
-            handle = 430
-        elif predict_base < 350:
+        # if max_index == 0:
+        #     handle = 290
+        # elif max_index == 6:
+        #     handle = 430
+        if predict_base < 350:
             handle = base_handle - 5
         elif 370 < predict_base:
             handle = base_handle + 5
@@ -57,8 +57,8 @@ class MiniCar():
         return int(handle)
 
     def _determine_speed(self, predict_speed, handle) -> int:
-        #speed = predict_speed - ((370 - predict_speed) * self.base_speed)  #倍率で加速する(base_speedに0.2を入れると355で加速幅が3)
-        speed = predict_speed - self.base_speed  # 定数値分加速する(base_speedに加速幅を指定)
+        speed = predict_speed - ((370 - predict_speed) * self.base_speed)  #倍率で加速する(base_speedに0.2を入れると355で加速幅が3)
+        # speed = predict_speed - self.base_speed  # 定数値分加速する(base_speedに加速幅を指定)
         #speed = self.base_speed + abs(handle - 360) / 20  # ハンドルを切る角度により減速はば幅が強くなる
         return int(speed)
 
