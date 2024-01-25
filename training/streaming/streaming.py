@@ -9,6 +9,7 @@ from binarization_camera import BinarizationCamera
 #from ultrasonic import UltraSonic
 from process_ultrasonic import ProcessUltraSonic
 from get_training_data import get_training_data
+from joystick_control import JoystickControl
 
 
 app = Flask(__name__)
@@ -42,4 +43,5 @@ def main():
         print('コマンドライン引数にラズパイのipアドレスを指定してください')
 
 if __name__ == '__main__':
+    joystick = JoystickControl()
     main()
