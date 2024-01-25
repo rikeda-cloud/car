@@ -8,13 +8,14 @@ from process_ultrasonic import ProcessUltraSonic
 from joystick_control import JoystickControl
 from get_training_data import get_training_data
 from json_buffer import JsonBuffer
+from dummy_ultrasonic import DummyUltraSonic
 
 
 def training(camera, ultrasonic):
     joystick = JoystickControl()
     buffer = JsonBuffer()
     while True:
-        if joystick.is_measure.value == True:
+        if joystick.is_measure.value == False:
             #s = time.time()
             data = get_training_data(camera, ultrasonic, joystick)
             print(data)
@@ -25,4 +26,5 @@ def training(camera, ultrasonic):
 
 
 if __name__ == '__main__':
-    training(HaarLikeCamera(divisions=40, rect_height=20), ProcessUltraSonic(timeout=0.10, pool_size=2))
+    #training(HaarLikeCamera(divisions=40, rect_height=20), ProcessUltraSonic(timeout=0.10, pool_size=2))
+    training(HaarLikeCamera(divisions=40, rect_height=20), DummyUltraSonic())
