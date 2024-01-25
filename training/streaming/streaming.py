@@ -25,7 +25,7 @@ def generate(camera, ultrasonic):
         #start = time.time()
         camera.capture()
         #print(camera.color_ratio())
-        print(ultrasonic.measure())
+        #print(ultrasonic.measure())
         frame = camera.frame()
         yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
         #print("time = ", time.time() - start)

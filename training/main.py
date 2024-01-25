@@ -15,7 +15,7 @@ def training(camera, ultrasonic):
     joystick = JoystickControl()
     buffer = JsonBuffer()
     while True:
-        if joystick.is_measure.value == False:
+        if joystick.is_measure.value == True:
             #s = time.time()
             data = get_training_data(camera, ultrasonic, joystick)
             print(data)
