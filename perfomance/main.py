@@ -9,6 +9,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '../sensor/ultrasonic'))
 from haar_like_camera import HaarLikeCamera
 from process_ultrasonic import ProcessUltraSonic
 from minicar import MiniCar
+from dummy_ultrasonic import DummyUltraSonic
 
 
 def run_minicar(car, camera, ultrasonic) -> None:
@@ -26,7 +27,8 @@ def run_minicar(car, camera, ultrasonic) -> None:
 def determine_ultrasonic(model: str):
     if 'only_camera_model' in model:
         print("only_camera")
-        return ProcessUltraSonic(pool_size=2, timeout=0.035, echo_pin=[], trig_pin=[])
+        return DummyUltraSonic()
+        #return ProcessUltraSonic(pool_size=2, timeout=0.035, echo_pin=[], trig_pin=[])
     elif 'c_d4_model' in model:
         print("sensor4")
         return ProcessUltraSonic(pool_size=2, timeout=0.035, echo_pin=[15, 21, 31, 33], trig_pin=[16, 22, 32, 35])
@@ -37,15 +39,15 @@ def determine_ultrasonic(model: str):
 
 def main():
     try:
-        model = sys.argv[1]
+        model_base = sys.argv[1]
         base_speed = int(sys.argv[2])
     except IndexError:
-        model = "reg_only_camera_model_v2"
+        model_base = "reg_only_camera_model_v2"
         base_speed = 350
 
-    car = MiniCar(base_speed=base_speed, model=model)
+    car = MiniCar(base_speed=base_speed, model_base=model_base)
     camera = HaarLikeCamera(divisions=40, rect_height=20)
-    ultrasonic = determine_ultrasonic(model)
+    ultrasonic = determine_ultrasonic(model_base)
     run_minicar(car, camera, ultrasonic)
 
 
