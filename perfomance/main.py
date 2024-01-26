@@ -30,7 +30,7 @@ def main():
         base_speed = int(sys.argv[2])
     except IndexError:
         model = "final"
-        base_speed = 0.8
+        base_speed = 1
 
     car = MiniCar(base_speed=base_speed, model=model)
     camera = HaarLikeCamera(divisions=40, rect_height=20)

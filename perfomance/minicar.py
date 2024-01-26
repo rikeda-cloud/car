@@ -84,13 +84,14 @@ class MiniCar():
 
     def drive(self, data: List[int], number_of_sensor: int) -> None:
         predict = self._predict(data, self.model)
-        predict_handle = self._predict(data, self.model_handle)
-        max_index = np.argmax(predict_handle)
+        #predict_handle = self._predict(data, self.model_handle)
+        #max_index = np.argmax(predict_handle)
         predict_speed = self._predict(data, self.model_speed)
+        max_index = 1
         handle = self._determine_handle(predict, max_index)
         speed = 370 - (370 - int(predict_speed)) * self.base_speed 
-        if predict_speed < 350:
-            speed = 342
+        #if predict_speed < 350:
+        #    speed = 342
         #speed = self._determine_speed(handle)
         self.handle.value = handle
         self.speed.value = int(speed)
