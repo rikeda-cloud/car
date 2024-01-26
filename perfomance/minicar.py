@@ -89,6 +89,8 @@ class MiniCar():
         predict_speed = self._predict(data, self.model_speed)
         handle = self._determine_handle(predict, max_index)
         speed = 370 - (370 - int(predict_speed)) * self.base_speed 
+        if predict_speed < 350:
+            speed = 342
         #speed = self._determine_speed(handle)
         self.handle.value = handle
         self.speed.value = int(speed)
