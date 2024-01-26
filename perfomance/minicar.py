@@ -94,4 +94,4 @@ class MiniCar():
         #speed = self._determine_speed(handle)
         self.handle.value = handle
         self.speed.value = int(speed)
-        #print("speed = ", speed)
+        print("speed = ", speed)
