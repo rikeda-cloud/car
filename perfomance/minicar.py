@@ -46,10 +46,14 @@ class MiniCar():
         self.process.join()
 
     def _determine_handle(self, value, max_idx) -> int:
-        if max_idx == 0:
-            handle = 290
-        elif max_idx == 6:
+        #if max_idx == 0:
+        #    handle = 290
+        #elif max_idx == 6:
+        #    handle = 430
+        if value > 410:
             handle = 430
+        elif value < 310:
+            handle = 290
         elif value < 350:
             handle = int(value - 5)
         elif 370 < value:
