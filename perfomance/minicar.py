@@ -63,7 +63,7 @@ class MiniCar():
         self.handle.value = handle
         return handle
 
-    def _determine_speed(self, handle: int, ultrasonic_data: list, number_of_sensor: int) -> int:
+    def _determine_speed(self, handle: int) -> int:
         #count = 0
         #for data in ultrasonic_data:
         #    if data < S_SHAPED_THRESHOLD:
@@ -72,8 +72,8 @@ class MiniCar():
         #    deceleration = ((370 - self.base_speed) / 5) * 3
         #else:
         #    deceleration = abs(handle - 360) / 10
-        #deceleration = 0
-        deceleration = abs(handle - 360) / 20
+        deceleration = 0
+        #deceleration = abs(handle - 360) / 20
         return self.base_speed + int(deceleration)
 
     def _predict(self, data: List[int], model) -> List[float]:
@@ -88,8 +88,8 @@ class MiniCar():
         max_index = np.argmax(predict_handle)
         predict_speed = self._predict(data, self.model_speed)
         handle = self._determine_handle(predict, max_index)
-        speed = int(predict_speed - 5)
-        #speed = self._determine_speed(handle, data[40: 40 + number_of_sensor], number_of_sensor)
+        speed = 370 - (370 - int(predict_speed)) * self.base_speed 
+        #speed = self._determine_speed(handle)
         self.handle.value = handle
-        self.speed.value = speed
+        self.speed.value = int(speed)
         #print("speed = ", speed)
