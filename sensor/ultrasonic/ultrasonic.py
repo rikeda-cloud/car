@@ -3,10 +3,10 @@ import RPi.GPIO as GPIO
 
 
 class UltraSonic():
-    def __init__(self, timeout=0.10):
+    def __init__(self, timeout=0.10, echo_pin=[7, 10, 12, 15, 18, 21, 23, 26, 31, 33], trig_pin=[8, 11, 13, 16, 19, 22, 24, 29, 32, 35]):
         self.timeout = timeout # us
-        self.ECHO_PIN = [7, 10, 12, 15, 18, 21, 23, 26, 31, 33]
-        self.TRIG_PIN = [8, 11, 13, 16, 19, 22, 24, 29, 32, 35]
+        self.ECHO_PIN = echo_pin
+        self.TRIG_PIN = trig_pin
         self.number_of_sensor = len(self.ECHO_PIN)
  
     def _mesure_time(self, target: int, echo: int) -> float:

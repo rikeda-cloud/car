@@ -1,35 +1,42 @@
 import sys, os
 import time
 #import aws_client
-import threading
 from typing import List
 
+sys.path.append(os.path.join(os.path.dirname(__file__), '../training'))
 sys.path.append(os.path.join(os.path.dirname(__file__), '../sensor/camera'))
 sys.path.append(os.path.join(os.path.dirname(__file__), '../sensor/ultrasonic'))
 from haar_like_camera import HaarLikeCamera
-from process_camera import ProcessCamera
 from process_ultrasonic import ProcessUltraSonic
+from dummy_ultrasonic import DummyUltraSonic
 from minicar import MiniCar
-#from get_perfomance_data import get_perfomance_data
-from get_perfomance_data_v3 import get_perfomance_data
 
 
-def run_minicar(camera, ultrasonic, car) -> None:
+def run_minicar(car, camera, ultrasonic) -> None:
     try:
         while True:
             #s = time.time()
-            perfomance_data = get_perfomance_data(camera, ultrasonic)
-            car.drive(perfomance_data)
+            perfomance_data: List[int] = car.get_perfomance_data.get_perfomance_data(camera, ultrasonic)
+            car.drive(perfomance_data, ultrasonic.number_of_sensor)
             print(perfomance_data)
             #print(time.time() - s)
     except(KeyboardInterrupt, SystemExit):
-        print("Exit")
+        print("Exit and Save")
+
+
+def main():
+    try:
+        model = sys.argv[1]
+        base_speed = int(sys.argv[2])
+    except IndexError:
+        model = "final"
+        base_speed = 1.3
+
+    car = MiniCar(base_speed=base_speed, model=model)
+    camera = HaarLikeCamera(divisions=40, rect_height=20)
+    ultrasonic = DummyUltraSonic()
+    run_minicar(car, camera, ultrasonic)
 
 
 if __name__ == "__main__":
-    run_minicar(
-        HaarLikeCamera(divisions=40, rect_height=20),
-        #ProcessCamera(divisions=40, rect_height=20),
-        ProcessUltraSonic(pool_size=2, timeout=0.10),
-        MiniCar(base_speed=355, model="model_v3.pkl")
-    )
+    main()

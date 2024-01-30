@@ -8,6 +8,7 @@ def _mesure_time(target: int, echo: int, timeout: float) -> float:
     start_time = time.time()
     while GPIO.input(echo) == target:
         if time.time() - start_time > timeout:
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             raise timeout
     return time.time()
 
@@ -35,8 +36,8 @@ def _async_measure(ipt) -> float:
     
 
 class ProcessUltraSonic(UltraSonic):
-    def __init__(self, timeout=0.05, pool_size=2):
-        super().__init__(timeout)
+    def __init__(self, timeout=0.05, pool_size=2, echo_pin=[7, 10, 12, 15, 18, 21, 23, 26, 31, 33], trig_pin=[8, 11, 13, 16, 19, 22, 24, 29, 32, 35]):
+        super().__init__(timeout, echo_pin, trig_pin)
         self.pool = Pool(pool_size)
 
     def measure(self) -> dict[str, str]:
