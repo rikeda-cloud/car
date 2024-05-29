@@ -19,3 +19,8 @@
 ex) ultrasonic = ProcessUltraSonic(pool_size=2, timeout=0.035, echo_pin=[15, 21, 31, 33], trig_pin=[16, 22, 32, 35])
 * 新たに機械学習モデルを追加する際はget_perfomance_data.py内のGetPerfomanceDataクラスにデータを取得して学習モデルに使うパラメータをlistとして返すメソッドを記述し、determine_get_perfomance_dataメソッド内の_func_dict_for_modelディクトに['モデル名': モデルに対応したデータ取得メソッド]の形式で追加する。
 * [ python3 main.py ]で実行
+
+# 実際の走行映像
+
+https://github.com/rikeda-cloud/car/assets/116556794/c689021f-23c6-420f-9472-2fcf9e12b9cc
+
